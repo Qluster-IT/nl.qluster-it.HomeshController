@@ -1,7 +1,7 @@
 'use strict';
 
 const { Driver } = require('homey');
-const { httpsGet, Defer, httpsPost } = require('../../lib/proto');
+const { httpsGet, Defer, httpsPost, httpPost } = require('../../lib/proto');
 
 class SatelliteDriver extends Driver {
 
@@ -27,6 +27,7 @@ class SatelliteDriver extends Driver {
         data: {
           id: discoveryResult.id,
         },
+        store:{address:discoveryResult.address}
       };
     });
 
@@ -52,21 +53,24 @@ class SatelliteDriver extends Driver {
 
     session.setHandler('pincode', async (pincode) => {
       // The pincode is given as an array of the filled in values
-      let a = await this.getAuthorization({pincode});
-      return (
-        pincode[0] === "1" && pincode[1] === "2"  && pincode[2] === "3" && pincode[3] === "4" 
-        
-        );
+      let authorization = await this.getAuthorization({pincode:pincode.join('')});
+      if(authorization && authorization.token) {
+        device.store.token = authorization.token;
+        return true;
+      }
+      return false;
     });
+
   }
 
   getAuthorization({pincode}) {
     let defer = new Defer();
-    httpsPost({url:'https://192-168-1-17.homey.homeylocal.com/api/app/nl.qluster-it.HominySatellite/getauthorization/', body:{pincode}})
+    //https://192-168-1-17.homey.homeylocal.com/api/app/nl.qluster-it.HominySatellite/getauthorization/
+    httpPost({url:'http://192.168.1.17/api/app/nl.qluster-it.HominySatellite/getauthorization/', body:{pincode}})
     .then((body,b)=>{
       this.log('getAuthorization successfull', body);
       
-      //defer.resolve(false);
+      if(body.token) defer.resolve(body); else defer.reject('Pincode invalid.');
     }).catch((error,b)=>{
       this.error('getAuthorization error', error);
       defer.reject(error);

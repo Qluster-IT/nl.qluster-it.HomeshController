@@ -57,6 +57,7 @@ class MyDevice extends Device {
   async onDiscoveryAvailable(discoveryResult) {
     // This method will be executed once when the device has been found (onDiscoveryResult returned true)
     let a = discoveryResult.address;
+    this.setStoreValue('address', discoveryResult.address);
     // this.api = new MyDeviceAPI(discoveryResult.address);
     // await this.api.connect(); // When this throws, the device will become unavailable.
   }
@@ -64,13 +65,16 @@ class MyDevice extends Device {
   onDiscoveryAddressChanged(discoveryResult) {
     // Update your connection details here, reconnect when the device is offline
     let a = discoveryResult.address;
-
+    this.setStoreValue('address', discoveryResult.address);
+    
     // this.api.address = discoveryResult.address;
     // this.api.reconnect().catch(this.error);
   }
 
   onDiscoveryLastSeenChanged(discoveryResult) {
     let a = discoveryResult.address;
+    this.setStoreValue('address', discoveryResult.address);
+    
     // When the device is offline, try to reconnect here
     // this.api.reconnect().catch(this.error);
   }
