@@ -1,0 +1,29 @@
+{
+  "id": "nl.qluster-it.HominyController",
+  "version": "0.0.1",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Hominy Controller"
+  },
+  "description": {
+    "en": "Control other (satellite) Homey's"
+  },
+  "category": [
+    "appliances"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Arie J. Godschalk",
+    "email": "arie@qluster-it.nl"
+  },
+  "support": "mailto:arie@qluster-it.nl"
+}
