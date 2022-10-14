@@ -107,7 +107,7 @@ class SatelliteDriver extends Driver {
               
             let promise = this.startFlow(args);
             
-            if (!(args.waittofinish === false)) {
+            if (!args.waittofinish || args.waittofinish=='waittofinish' ) {
               return await promise;
             } else {
               return {text1:'', number1:0, boolean1:false};
