@@ -200,8 +200,8 @@ class SatelliteDriver extends Driver {
 
   getAuthorization({device, pincode}) {
     let defer = new Defer();
-    //https://${device.store.address.replace('.','-')}.homey.homeylocal.com/api/app/nl.qluster-it.BlackWholeSatellite/getauthorization/
-    httpPost({url:`http://${device.address || device.store.address}/api/app/nl.qluster-it.BlackWholeSatellite/getauthorization/`, body:{pincode}})
+    //https://${device.store.address.replace('.','-')}.homey.homeylocal.com/api/app/nl.qluster-it.HomeshSatellite/getauthorization/
+    httpPost({url:`http://${device.address || device.store.address}/api/app/nl.qluster-it.HomeshSatellite/getauthorization/`, body:{pincode}})
     .then((body,b)=>{
       this.log('getAuthorization successfull', body);
       
@@ -216,7 +216,7 @@ class SatelliteDriver extends Driver {
   getFlowEventNames({device, query}) {
     let defer = new Defer();
     httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.BlackWholeSatellite/getFlowEventNames/`, 
+      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/getFlowEventNames/`, 
       body:{token:device.token, query}
     })
     .then((body,b)=>  defer.resolve(body) )
@@ -227,7 +227,7 @@ class SatelliteDriver extends Driver {
   startFlow({device, name, text1, number1, boolean1}) {
     let defer = new Defer();
     httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.BlackWholeSatellite/startFlow/`, 
+      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/startFlow/`, 
       body:{token:device.token, name, text1, number1, boolean1}
     })
     .then((body,b)=>  defer.resolve(body) )
@@ -239,7 +239,7 @@ class SatelliteDriver extends Driver {
   playUrl({device, url}) {
     let defer = new Defer();
     httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.BlackWholeSatellite/playUrl/`, 
+      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/playUrl/`, 
       body:{token:device.token, url}
     })
     .then((body,b)=>  defer.resolve(body) )
@@ -250,7 +250,7 @@ class SatelliteDriver extends Driver {
   sayAthom({device, text}) {
     let defer = new Defer();
     httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.BlackWholeSatellite/sayAthom/`, 
+      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/sayAthom/`, 
       body:{token:device.token, text}
     })
     .then((body,b)=>  defer.resolve(body) )
