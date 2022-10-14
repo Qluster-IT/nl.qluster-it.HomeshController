@@ -1,5 +1,6 @@
 'use strict';
 
+const googleTTS = require('google-tts-api');
 const { Driver } = require('homey');
 const { httpsGet, Defer, httpsPost, httpPost } = require('../../lib/proto');
 const _ = require('lodash-core');
@@ -18,7 +19,7 @@ class SatelliteDriver extends Driver {
       var defer = new Defer();
         try {
           if(!args.url) return Promise.resolve(false);
-                    
+
           this.playUrl(args)
           .then((res)=>{
             if(res===true) defer.resolve(res);
@@ -34,47 +35,78 @@ class SatelliteDriver extends Driver {
       return defer.promise;
     }).bind(this));
 
+
+    
+    var starts = [
+      {id:'action_satellite_say', slow:false}
+      // {id:'start_googletts_slow', slow:true},        
+      // {id:'start_googletts_af', slow:false, af:true},
+      // {id:'start_googletts_slow_af', slow:true, af:true}
+    ];
+    for (let i = 0; i < starts.length; i++) {
+      const start = starts[i];        
+      const start_googlettsAction = this.homey.flow.getActionCard(start.id);
+      start_googlettsAction.registerRunListener(( ( args, state ) => { //async              
+        const defer = new Defer();
+        try {
+          if(!args.device || !args.text) return false;
+          if(args.text.length>200) return  new Error("Max 200 characters");
+          const settings =  args.device.getSettings();
+          const languagecode = settings && settings.languagecode ? settings.languagecode : 'en-GB';
+          const url = googleTTS.getAudioUrl(args.text, { lang:languagecode, slow: start.slow });
+
+          this.playUrl({device:args.device, url});
+          //this.Triggers.urlTrigger.Card.trigger(args.device, {url:url, text:args.text} );
+
+          defer.resolve(start.af ? {url:url, text:args.text} : true);
+        } catch (error) { console.log('Error: ' + error); defer.resolve('An error occured'); }
+          return defer.promise;
+      }).bind(this));
+    }
+
+
+
     
     //#region Actioncards startFlow
-    var actions = this.actions = [
-      { id: 'action__satellite_startflow__text1_number1_boolean1' }
-    ];
-    for (let i = 0; i < actions.length; i++) {
-      const action = actions[i];
-      const actionCard = this.homey.flow.getActionCard(action.id);
-      action.card = actionCard;
-      this.setCounts(action);
-      
-      actionCard.registerRunListener(async (args, state, more) => { //async
-        var defer = new Defer();
-        try {
-          args.name  = args.name || { name: args.namebytag } ;
-          delete args.namebytag;
-          for (let j = 1; j <= action.textCount; j++) if (args['text' + j.toString()] === undefined) args['text' + j.toString()] = "";
-          for (let j = 1; j <= action.numberCount; j++) if (args['number' + j.toString()] === undefined) args['number' + j.toString()] = 0;
-          for (let j = 1; j <= action.booleanCount; j++) if (args['boolean' + j.toString()] === undefined) args['boolean' + j.toString()] = false;
+      var actions = this.actions = [
+        { id: 'action__satellite_startflow__text1_number1_boolean1' }
+      ];
+      for (let i = 0; i < actions.length; i++) {
+        const action = actions[i];
+        const actionCard = this.homey.flow.getActionCard(action.id);
+        action.card = actionCard;
+        this.setCounts(action);
+        
+        actionCard.registerRunListener(async (args, state, more) => { //async
+          var defer = new Defer();
+          try {
+            args.name  = args.name || args.namebytag ;
+            delete args.namebytag;
+            for (let j = 1; j <= action.textCount; j++) if (args['text' + j.toString()] === undefined) args['text' + j.toString()] = "";
+            for (let j = 1; j <= action.numberCount; j++) if (args['number' + j.toString()] === undefined) args['number' + j.toString()] = 0;
+            for (let j = 1; j <= action.booleanCount; j++) if (args['boolean' + j.toString()] === undefined) args['boolean' + j.toString()] = false;
+              
+            let promise = this.startFlow(args);
             
-          let promise = this.startFlow(args);
-          
-          if (!(args.waittofinish === false)) {
-            return await promise;
-          } else {
-            return {text1:'', number1:0, boolean1:false};
+            if (!(args.waittofinish === false)) {
+              return await promise;
+            } else {
+              return {text1:'', number1:0, boolean1:false};
+            }
+          } catch (error) {
+            console.log('Error: ' + error);
+            defer.reject(error);
           }
-        } catch (error) {
-          console.log('Error: ' + error);
-          defer.reject(error);
-        }
-        return defer.promise;
-      });
+          return defer.promise;
+        });
 
-      actionCard.getArgument('name').registerAutocompleteListener(async (query, args) => {
-        try {
-          action.lastName = query;
-          return await this.getEventNames({ targetCard: action.triggerCard, query: query, args: args, isAction: true });
-        } catch (error) { this.error('action.name.registerAutocompleteListener.error :', error); throw error; }
-      });
-    }
+        actionCard.getArgument('name').registerAutocompleteListener(async (query, args) => {
+          try {
+            action.lastName = query;
+            return await this.getEventNames({ targetCard: action.triggerCard, query: query, args: args, isAction: true });
+          } catch (error) { this.error('action.name.registerAutocompleteListener.error :', error); throw error; }
+        });
+      }
 
     //#endregion
 
@@ -195,7 +227,6 @@ class SatelliteDriver extends Driver {
     .catch((error,b)=> this.handleError({id:'startUrl', error, device, defer}));
     return defer.promise;
   }
-
 
 
 

@@ -9,6 +9,7 @@
     "@types/node": "^18.8.5"
   },
   "dependencies": {
+    "google-tts-api": "^2.0.2",
     "lodash-core": "^4.17.19"
   }
 }
