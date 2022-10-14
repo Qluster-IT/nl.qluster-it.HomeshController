@@ -29,32 +29,38 @@ class SatelliteDriver extends Driver {
         try {
           //console.log(action.id + '.registerRunListener args: ');
           //console.log(args);
-          let newArgs = { name: args.name || { name: args.namebytag } };
-          delete args.name;
+          args.name  = args.name || { name: args.namebytag } ;
 
-            
+          //delete args.name;
+          delete args.namebytag;
+
             for (let j = 1; j <= action.textCount; j++) if (args['text' + j.toString()] === undefined) args['text' + j.toString()] = "";
             for (let j = 1; j <= action.numberCount; j++) if (args['number' + j.toString()] === undefined) args['number' + j.toString()] = 0;
             for (let j = 1; j <= action.booleanCount; j++) if (args['boolean' + j.toString()] === undefined) args['boolean' + j.toString()] = false;
             
-            let tokens = {};
 
-            if (args.waittofinish === false) {
-              defer.resolve(tokens);
-              delete this.returns[newArgs.name.name].list[this.returns[newArgs.name.name].count];
+            
+            
+            let promise = this.startFlow(args);
+            
+            if (!(args.waittofinish === false)) {
+              return await promise;
+            } else {
+              return {text1:'', number1:0, boolean1:false};
             }
-            else {
-              // Promise.all(promises)
-              //   .then(x => {
-              //     let a = recievedTokens;
-              //     defer.resolve(recievedTokens || tokens);
-              //     delete this.returns[newArgs.name.name].list[this.returns[newArgs.name.name].count];
-              //   })
-              //   .catch(err => {
-              //     defer.reject(err);
-              //     delete this.returns[newArgs.name.name].list[this.returns[newArgs.name.name].count];
-              //   });
-            }
+
+            // else {
+            //   // Promise.all(promises)
+            //   //   .then(x => {
+            //   //     let a = recievedTokens;
+            //   //     defer.resolve(recievedTokens || tokens);
+            //   //     delete this.returns[newArgs.name.name].list[this.returns[newArgs.name.name].count];
+            //   //   })
+            //   //   .catch(err => {
+            //   //     defer.reject(err);
+            //   //     delete this.returns[newArgs.name.name].list[this.returns[newArgs.name.name].count];
+            //   //   });
+            // }
         } catch (error) {
           console.log('Error: ' + error);
           defer.reject(error);
@@ -69,10 +75,10 @@ class SatelliteDriver extends Driver {
         } catch (error) { this.error('action.name.registerAutocompleteListener.error :', error); throw error; }
       });
 
-      actionCard.on("update", async () => {
-        this.setArgumentValues(action, actionCard);
-      });
-      this.setArgumentValues(action, actionCard);
+      // actionCard.on("update", async () => {
+      //   this.setArgumentValues(action, actionCard);
+      // });
+      // this.setArgumentValues(action, actionCard);
     }
 
     //#endregion
@@ -148,10 +154,25 @@ class SatelliteDriver extends Driver {
 
   getFlowEventNames({device, query}) {
     let defer = new Defer();
-    httpPost({url:`http://${device.address}/api/app/nl.qluster-it.HominySatellite/getFlowEventNames/`, body:{token:device.token, query}})
-    .then((body,b)=> 
-      defer.resolve(body)
-    )
+    httpPost({
+      url:`http://${device.address}/api/app/nl.qluster-it.HominySatellite/getFlowEventNames/`, 
+      body:{token:device.token, query}
+    })
+    .then((body,b)=>  defer.resolve(body) )
+    .catch((error,b)=>{
+      this.error('getFlowEventNames error', error);
+      defer.reject(error);
+    });
+    return defer.promise;
+  }
+
+  startFlow({device, name, text1, number1, boolean1}) {
+    let defer = new Defer();
+    httpPost({
+      url:`http://${device.address}/api/app/nl.qluster-it.HominySatellite/startFlow/`, 
+      body:{token:device.token, name, text1, number1, boolean1}
+    })
+    .then((body,b)=>  defer.resolve(body) )
     .catch((error,b)=>{
       this.error('getFlowEventNames error', error);
       defer.reject(error);
@@ -161,6 +182,11 @@ class SatelliteDriver extends Driver {
 
   
 
+
+  async getEventNames({ targetCard, query, args, isAction = false } = {}) {
+    let r = (await this.getFlowEventNames({device:args.device, query:query}));//.map(x=>{ return {name:x};} );
+    return r;
+  }
 
   
   //#region Functions the same as AdvancedTriggers
@@ -177,53 +203,6 @@ class SatelliteDriver extends Driver {
       }
   }
 
-
-  async setArgumentValues(cardObject, cardCard) {
-    cardObject.argumentValues = await cardCard.getArgumentValues();
-  }
-
-  async getEventNames({ targetCard, query, args, isAction = false } = {}) {
-    let r = (await this.getFlowEventNames({device:args.device, query:query}));//.map(x=>{ return {name:x};} );
-    return r;
-    // var _return = query && query != '' && query.trim() != '' ? [{ name: query, description: this.homey.__("return_description_create") }] : [];
-    // var cards = [];
-    // cards = _.toArray(this.actions);
-    
-    // for (let iCards = 0; iCards < cards.length; iCards++) {
-    //   const card = cards[iCards];
-    //   if (card.lastName && (!isAction || card == targetCard)) {
-    //     var o = null;
-    //     if (!(o = _.find(_return, x => { return x.name == card.lastName; }))) _return.push({ name: card.lastName, description: this.homey.__("return_description_select") });
-    //     else o.description = this.homey.__("return_description_select");
-    //   }
-    // }
-    // for (let iCards = 0; iCards < cards.length; iCards++) {
-    //   const card = cards[iCards];
-    //   for (let i = 0; i < card.argumentValues.length; i++) {
-    //     const element = card.argumentValues[i];
-    //     if (!element.name) continue;
-    //     //if (isAction && (card.textCount > targetCard.textCount || card.numberCount > targetCard.numberCount || card.booleanCount > targetCard.booleanCount) && element.overloadable != 'true') continue;
-    //     //else if (!isAction && (card.textCount < targetCard.textCount || card.numberCount < targetCard.numberCount || card.booleanCount < targetCard.booleanCount) && (!args || args.overloadable != 'true')) continue;
-
-    //     if (query && query != '') {
-    //       if (element.name.name.indexOf(query) > -1) {
-    //         let o = null;
-    //         if (!(o = _.find(_return, x => { return x.name == element.name.name; })))
-    //           _return.push({ name: element.name.name, description: this.homey.__("return_description_select") });
-    //         else o.description = this.homey.__("return_description_select");
-    //       }
-    //     }
-    //     else {
-    //       let o = null;
-    //       if (!(o = _.find(_return, x => { return x.name == element.name.name; })))
-    //         _return.push({ name: element.name.name, description: this.homey.__("return_description_select") });
-    //       else o.description = this.homey.__("return_description_select");
-    //       //if(!_.find(_return, x=>{return x.name==element.name.name;})) _return.push({ name: element.name.name, description:this.homey.__("return_description_select") });
-    //     }
-    //   }
-    // }
-    // return _return;
-  }
   //#endregion
 
 

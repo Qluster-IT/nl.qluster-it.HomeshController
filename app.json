@@ -108,7 +108,7 @@
             "required": false
           }
         ],
-        "tokens": [
+        "tokensnotinuse": [
           {
             "type": "string",
             "name": "text1",
