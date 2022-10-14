@@ -9,6 +9,14 @@ class HomeySatelliteDevice extends Device {
    */
   async onInit() {
     this.log('HomeySatelliteDevice has been initialized');
+    this.address = await this.getStoreValue('address');
+    this.token = await this.getStoreValue('token');
+
+    if(!this.token && this.driver.token) {
+      this.token = this.driver.token;
+      delete this.driver.token;
+      await this.setStoreValue('token', this.token);
+    }
   }
 
   /**

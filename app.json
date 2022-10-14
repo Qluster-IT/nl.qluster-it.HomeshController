@@ -27,6 +27,116 @@
     "email": "arie@qluster-it.nl"
   },
   "support": "mailto:arie@qluster-it.nl",
+  "flow": {
+    "actions": [
+      {
+        "id": "action__satellite_startflow__text1_number1_boolean1",
+        "title": {
+          "en": "Start Flowcard",
+          "nl": "Start Flowkaart"
+        },
+        "titleFormatted": {
+          "en": "Start [[name]]/[[namebytag]] with ([[text1]], [[number1]], [[boolean1]]) and Set Wait to Finish to [[waittofinish]]",
+          "nl": "Start [[name]]/[[namebytag]] met ([[text1]], [[number1]], [[boolean1]]) en zet wacht op gereed op [[waittofinish]]"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=satellite"
+          },
+          {
+            "type": "autocomplete",
+            "required": false,
+            "name": "name",
+            "placeholder": {
+              "en": "Type or select a trigger name",
+              "nl": "Type of kies een trigger naam"
+            },
+            "title": {
+              "en": "Triggername",
+              "nl": "Triggernaam"
+            }
+          },
+          {
+            "type": "text",
+            "required": false,
+            "name": "namebytag",
+            "placeholder": {
+              "en": "Or use a Tag or text as name",
+              "nl": "Of gebruik een Tag of tekst als naam"
+            },
+            "title": {
+              "en": "Tag",
+              "nl": "Tag"
+            }
+          },
+          {
+            "type": "text",
+            "name": "text1",
+            "placeholder": {
+              "en": "Text 1",
+              "nl": "Tekst 1"
+            },
+            "required": false
+          },
+          {
+            "type": "number",
+            "name": "number1",
+            "placeholder": {
+              "en": "Number 1",
+              "nl": "Nummer 1"
+            },
+            "required": false
+          },
+          {
+            "type": "checkbox",
+            "name": "boolean1",
+            "placeholder": {
+              "en": "Yes/No 1",
+              "nl": "Ja/Nee 1"
+            },
+            "required": false
+          },
+          {
+            "type": "checkbox",
+            "name": "waittofinish",
+            "placeholder": {
+              "en": "Yes",
+              "nl": "Ja"
+            },
+            "required": false
+          }
+        ],
+        "tokens": [
+          {
+            "type": "string",
+            "name": "text1",
+            "title": {
+              "en": "Text 1",
+              "nl": "Tekst 1"
+            }
+          },
+          {
+            "type": "number",
+            "name": "number1",
+            "title": {
+              "en": "Number 1",
+              "nl": "Nummer 1"
+            }
+          },
+          {
+            "type": "boolean",
+            "name": "boolean1",
+            "title": {
+              "en": "Yes/No 1",
+              "nl": "Ja/Nee 1"
+            }
+          }
+        ]
+      }
+    ]
+  },
   "drivers": [
     {
       "name": {
@@ -38,9 +148,9 @@
         "local"
       ],
       "images": {
-        "small": "/drivers/homey-satellite/assets/images/small.png",
-        "large": "/drivers/homey-satellite/assets/images/large.png",
-        "xlarge": "/drivers/homey-satellite/assets/images/xlarge.png"
+        "small": "/drivers/satellite/assets/images/small.png",
+        "large": "/drivers/satellite/assets/images/large.png",
+        "xlarge": "/drivers/satellite/assets/images/xlarge.png"
       },
       "connectivity": [
         "lan"
@@ -69,7 +179,7 @@
           "template": "add_devices"
         }
       ],
-      "id": "homey-satellite"
+      "id": "satellite"
     }
   ],
   "discovery": {
