@@ -7,7 +7,7 @@
     "local"
   ],
   "name": {
-    "en": "Homesh (Controller)"
+    "en": "Homesh Controller"
   },
   "description": {
     "en": "Control other Homey's"
