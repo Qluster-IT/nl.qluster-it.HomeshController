@@ -1,0 +1,26 @@
+{
+    "id": "action_satellite_say_athom",
+    "title": {
+      "en": "Start TTS (Athom)",
+      "nl": "Begin TTS (Athom)"
+  },
+  "titleFormatted": {
+      "en": "Say [[text]] (Athom)",
+      "nl": "Zeg [[text]] (Athom)"
+  },
+  "args": [
+    {
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=satellite"
+    },
+      {
+          "name": "text",
+          "type": "text",
+          "placeholder": {
+              "en": "Text",
+              "nl": "Tekst"
+          }
+      }
+  ]
+  }

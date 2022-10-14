@@ -1,12 +1,12 @@
 {
     "id": "action_satellite_say",
     "title": {
-      "en": "Start TTS",
-      "nl": "Begin TTS"
+      "en": "Start TTS (Google)",
+      "nl": "Begin TTS (Google)"
   },
   "titleFormatted": {
-      "en": "Say [[text]]",
-      "nl": "Zeg [[text]]"
+      "en": "Say [[text]] (Google)",
+      "nl": "Zeg [[text]] (Google)"
   },
   "args": [
     {

@@ -37,14 +37,14 @@ class SatelliteDriver extends Driver {
 
 
     
-    var starts = [
+    var says = [
       {id:'action_satellite_say', slow:false}
       // {id:'start_googletts_slow', slow:true},        
       // {id:'start_googletts_af', slow:false, af:true},
       // {id:'start_googletts_slow_af', slow:true, af:true}
     ];
-    for (let i = 0; i < starts.length; i++) {
-      const start = starts[i];        
+    for (let i = 0; i < says.length; i++) {
+      const start = says[i];        
       const start_googlettsAction = this.homey.flow.getActionCard(start.id);
       start_googlettsAction.registerRunListener(( ( args, state ) => { //async              
         const defer = new Defer();
@@ -64,6 +64,25 @@ class SatelliteDriver extends Driver {
       }).bind(this));
     }
 
+
+    var saysAthom = [
+      {id:'action_satellite_say_athom'}
+    ];
+    for (let i = 0; i < saysAthom.length; i++) {
+      const start = saysAthom[i];        
+      const sayAthomAction = this.homey.flow.getActionCard(start.id);
+      sayAthomAction.registerRunListener(( ( args, state ) => {
+        const defer = new Defer();
+        try {
+          if(!args.device || !args.text) return defer.resolve(false);
+
+          this.sayAthom(args);
+          defer.resolve(true);
+
+        } catch (error) { console.log('Error: ' + error); defer.resolve('An error occured'); }
+          return defer.promise;
+      }).bind(this));
+    }
 
 
     
@@ -181,8 +200,8 @@ class SatelliteDriver extends Driver {
 
   getAuthorization({device, pincode}) {
     let defer = new Defer();
-    //https://${device.store.address.replace('.','-')}.homey.homeylocal.com/api/app/nl.qluster-it.HominySatellite/getauthorization/
-    httpPost({url:`http://${device.address || device.store.address}/api/app/nl.qluster-it.HominySatellite/getauthorization/`, body:{pincode}})
+    //https://${device.store.address.replace('.','-')}.homey.homeylocal.com/api/app/nl.qluster-it.BlackWholeSatellite/getauthorization/
+    httpPost({url:`http://${device.address || device.store.address}/api/app/nl.qluster-it.BlackWholeSatellite/getauthorization/`, body:{pincode}})
     .then((body,b)=>{
       this.log('getAuthorization successfull', body);
       
@@ -197,7 +216,7 @@ class SatelliteDriver extends Driver {
   getFlowEventNames({device, query}) {
     let defer = new Defer();
     httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.HominySatellite/getFlowEventNames/`, 
+      url:`http://${device.address}/api/app/nl.qluster-it.BlackWholeSatellite/getFlowEventNames/`, 
       body:{token:device.token, query}
     })
     .then((body,b)=>  defer.resolve(body) )
@@ -208,7 +227,7 @@ class SatelliteDriver extends Driver {
   startFlow({device, name, text1, number1, boolean1}) {
     let defer = new Defer();
     httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.HominySatellite/startFlow/`, 
+      url:`http://${device.address}/api/app/nl.qluster-it.BlackWholeSatellite/startFlow/`, 
       body:{token:device.token, name, text1, number1, boolean1}
     })
     .then((body,b)=>  defer.resolve(body) )
@@ -220,11 +239,22 @@ class SatelliteDriver extends Driver {
   playUrl({device, url}) {
     let defer = new Defer();
     httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.HominySatellite/playUrl/`, 
+      url:`http://${device.address}/api/app/nl.qluster-it.BlackWholeSatellite/playUrl/`, 
       body:{token:device.token, url}
     })
     .then((body,b)=>  defer.resolve(body) )
-    .catch((error,b)=> this.handleError({id:'startUrl', error, device, defer}));
+    .catch((error,b)=> this.handleError({id:'playUrl', error, device, defer}));
+    return defer.promise;
+  }
+
+  sayAthom({device, text}) {
+    let defer = new Defer();
+    httpPost({
+      url:`http://${device.address}/api/app/nl.qluster-it.BlackWholeSatellite/sayAthom/`, 
+      body:{token:device.token, text}
+    })
+    .then((body,b)=>  defer.resolve(body) )
+    .catch((error,b)=> this.handleError({id:'sayAthom', error, device, defer}));
     return defer.promise;
   }
 

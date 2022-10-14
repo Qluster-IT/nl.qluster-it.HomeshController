@@ -58,7 +58,7 @@
       },
       "value": "en-GB",
       "hint": {
-        "en": "Choose the language for this device"
+        "en": "Choose the language to use for the Say (Google) card."
       },
       "values": [
         {

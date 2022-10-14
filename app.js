@@ -4,13 +4,13 @@
 
 const Homey = require('homey');
 
-class HominyController extends Homey.App {
+class BlackWholeController extends Homey.App {
 
   /**
    * onInit is called when the app is initialized.
    */
   async onInit() {
-    this.log('HominyController App has been initialized');
+    this.log('BlackWholeController App has been initialized');
 
     // eslint-disable-next-line node/no-unsupported-features/node-builtins
     if (process.env.DEBUG === '1') require('inspector').open(9223, '0.0.0.0', true);
@@ -20,4 +20,4 @@ class HominyController extends Homey.App {
 
 }
 
-module.exports = HominyController;
+module.exports = BlackWholeController;

@@ -1,5 +1,5 @@
 {
-  "id": "nl.qluster-it.HominyController",
+  "id": "nl.qluster-it.BlackWholeController",
   "version": "0.0.3",
   "compatibility": ">=5.0.0",
   "sdk": 3,
@@ -7,10 +7,10 @@
     "local"
   ],
   "name": {
-    "en": "Hominy Controller"
+    "en": "BlackWhole (Controller)"
   },
   "description": {
-    "en": "Control other (satellite) Homey's"
+    "en": "Control other Homey's"
   },
   "category": [
     "appliances"
@@ -25,5 +25,6 @@
     "name": "Arie J. Godschalk",
     "email": "arie@qluster-it.nl"
   },
-  "support": "mailto:arie@qluster-it.nl"
+  "support": "mailto:arie@qluster-it.nl",
+  "brandColor": "#0066a4"
 }
