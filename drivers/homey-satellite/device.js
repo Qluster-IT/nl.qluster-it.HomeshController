@@ -2,20 +2,20 @@
 
 const { Device } = require('homey');
 
-class MyDevice extends Device {
+class HomeySatelliteDevice extends Device {
 
   /**
    * onInit is called when the device is initialized.
    */
   async onInit() {
-    this.log('MyDevice has been initialized');
+    this.log('HomeySatelliteDevice has been initialized');
   }
 
   /**
    * onAdded is called when the user adds the device, called just after pairing.
    */
   async onAdded() {
-    this.log('MyDevice has been added');
+    this.log('HomeySatelliteDevice has been added');
   }
 
   /**
@@ -27,7 +27,7 @@ class MyDevice extends Device {
    * @returns {Promise<string|void>} return a custom message that will be displayed
    */
   async onSettings({ oldSettings, newSettings, changedKeys }) {
-    this.log('MyDevice settings where changed');
+    this.log('HomeySatelliteDevice settings where changed');
   }
 
   /**
@@ -36,14 +36,14 @@ class MyDevice extends Device {
    * @param {string} name The new name
    */
   async onRenamed(name) {
-    this.log('MyDevice was renamed');
+    this.log('HomeySatelliteDevice was renamed');
   }
 
   /**
    * onDeleted is called when the user deleted the device.
    */
   async onDeleted() {
-    this.log('MyDevice has been deleted');
+    this.log('HomeySatelliteDevice has been deleted');
   }
 
 
@@ -55,32 +55,31 @@ class MyDevice extends Device {
   }
 
   async onDiscoveryAvailable(discoveryResult) {
-    // This method will be executed once when the device has been found (onDiscoveryResult returned true)
-    let a = discoveryResult.address;
-    this.setStoreValue('address', discoveryResult.address);
+    this.setAddress(discoveryResult.address);
+
     // this.api = new MyDeviceAPI(discoveryResult.address);
     // await this.api.connect(); // When this throws, the device will become unavailable.
   }
 
   onDiscoveryAddressChanged(discoveryResult) {
-    // Update your connection details here, reconnect when the device is offline
-    let a = discoveryResult.address;
-    this.setStoreValue('address', discoveryResult.address);
+    this.setAddress(discoveryResult.address);
     
     // this.api.address = discoveryResult.address;
     // this.api.reconnect().catch(this.error);
   }
 
   onDiscoveryLastSeenChanged(discoveryResult) {
-    let a = discoveryResult.address;
-    this.setStoreValue('address', discoveryResult.address);
+    this.setAddress(discoveryResult.address);
     
     // When the device is offline, try to reconnect here
     // this.api.reconnect().catch(this.error);
   }
 
-  
+  setAddress(address) {
+    this.setStoreValue('address', address);
+    this.address = address;
+  }
 
 }
 
-module.exports = MyDevice;
+module.exports = HomeySatelliteDevice;

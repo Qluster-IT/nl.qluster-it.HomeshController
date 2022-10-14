@@ -53,7 +53,7 @@ class SatelliteDriver extends Driver {
 
     session.setHandler('pincode', async (pincode) => {
       // The pincode is given as an array of the filled in values
-      let authorization = await this.getAuthorization({pincode:pincode.join('')});
+      let authorization = await this.getAuthorization({device, pincode:pincode.join('')});
       if(authorization && authorization.token) {
         device.store.token = authorization.token;
         return true;
@@ -63,10 +63,10 @@ class SatelliteDriver extends Driver {
 
   }
 
-  getAuthorization({pincode}) {
+  getAuthorization({device, pincode}) {
     let defer = new Defer();
     //https://192-168-1-17.homey.homeylocal.com/api/app/nl.qluster-it.HominySatellite/getauthorization/
-    httpPost({url:'http://192.168.1.17/api/app/nl.qluster-it.HominySatellite/getauthorization/', body:{pincode}})
+    httpPost({url:`http://${device.store.address}/api/app/nl.qluster-it.HominySatellite/getauthorization/`, body:{pincode}})
     .then((body,b)=>{
       this.log('getAuthorization successfull', body);
       
