@@ -15,7 +15,7 @@ class SatelliteDriver extends Driver {
 
     
     const action_satellite_play_url = this.homey.flow.getActionCard('action_satellite_play_url');
-    action_satellite_play_url.registerRunListener(( ( args, state ) => {
+    action_satellite_play_url.registerRunListener(( args, state ) => {
       var defer = new Defer();
         try {
           if(!args.url) return Promise.resolve(false);
@@ -30,12 +30,41 @@ class SatelliteDriver extends Driver {
           });
       } catch (error) { 
         console.log('Error: ' + error);
-        defer.reject('Something went wrong with the url.');
+        defer.reject('Something went wrong with the play url.');
       }
       return defer.promise;
-    }).bind(this));
+    });
 
 
+    
+    const action_satellite_play_soundboard = this.homey.flow.getActionCard('action_satellite_play_soundboard');
+    action_satellite_play_soundboard.registerRunListener(( args, state ) => {
+      var defer = new Defer();
+        try {
+          if(!args.file) return Promise.resolve(false);
+
+          this.playSoundboard(args)
+          .then((res)=>{
+            if(res===true) defer.resolve(res);
+            else defer.reject(res);
+          })
+          .catch((err)=>{
+            defer.reject(err);
+          });
+      } catch (error) { 
+        console.log('Error: ' + error);
+        defer.reject('Something went wrong with the play soundboard.');
+      }
+      return defer.promise;
+    });    
+    action_satellite_play_soundboard.getArgument('file').registerAutocompleteListener(async (query, args) => {
+      try {
+        let r = await this.getSoundboards(args);
+        return r;
+      } catch (error) { this.error('action_satellite_play_soundboard.file.registerAutocompleteListener.error :', error); throw error; }
+    });
+
+    
     
     var says = [
       {id:'action_satellite_say', slow:false}
@@ -46,7 +75,7 @@ class SatelliteDriver extends Driver {
     for (let i = 0; i < says.length; i++) {
       const start = says[i];        
       const start_googlettsAction = this.homey.flow.getActionCard(start.id);
-      start_googlettsAction.registerRunListener(( ( args, state ) => { //async              
+      start_googlettsAction.registerRunListener(( args, state ) => { //async              
         const defer = new Defer();
         try {
           if(!args.device || !args.text) return false;
@@ -61,7 +90,7 @@ class SatelliteDriver extends Driver {
           defer.resolve(start.af ? {url:url, text:args.text} : true);
         } catch (error) { console.log('Error: ' + error); defer.resolve('An error occured'); }
           return defer.promise;
-      }).bind(this));
+      });
     }
 
 
@@ -258,7 +287,27 @@ class SatelliteDriver extends Driver {
     return defer.promise;
   }
 
+  getSoundboards({device}) {
+    let defer = new Defer();
+    httpPost({
+      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/getSoundboards/`, 
+      body:{token:device.token}
+    })
+    .then((body,b)=>  defer.resolve(body) )
+    .catch((error,b)=> this.handleError({id:'sayAthom', error, device, defer}));
+    return defer.promise;
+  }
 
+  playSoundboard({device, file}) {
+    let defer = new Defer();
+    httpPost({
+      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/playSoundboard/`, 
+      body:{token:device.token, file}
+    })
+    .then((body,b)=>  defer.resolve(body) )
+    .catch((error,b)=> this.handleError({id:'sayAthom', error, device, defer}));
+    return defer.promise;
+  }
 
   
 async handleError({id, error, device, defer}) {

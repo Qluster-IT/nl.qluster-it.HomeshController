@@ -14,7 +14,7 @@ class HomeshController extends Homey.App {
 
     // eslint-disable-next-line node/no-unsupported-features/node-builtins
     if (process.env.DEBUG === '1') require('inspector').open(9223, '0.0.0.0', true);
-
+      
     //
   }
 
