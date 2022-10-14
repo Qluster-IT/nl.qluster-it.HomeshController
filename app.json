@@ -179,6 +179,18 @@
           "template": "add_devices"
         }
       ],
+      "repair": [
+        {
+          "id": "pincode",
+          "template": "pincode",
+          "options": {
+            "title": "Enter pincode:",
+            "hint": "Enter the Homey Satellite's pincode",
+            "type": "number",
+            "length": 4
+          }
+        }
+      ],
       "id": "satellite"
     }
   ],

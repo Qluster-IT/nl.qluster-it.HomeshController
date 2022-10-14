@@ -13,9 +13,8 @@ class HomeySatelliteDevice extends Device {
     this.token = await this.getStoreValue('token');
 
     if(!this.token && this.driver.token) {
-      this.token = this.driver.token;
+      this.setToken(this.driver.token);
       delete this.driver.token;
-      await this.setStoreValue('token', this.token);
     }
   }
 
@@ -88,6 +87,10 @@ class HomeySatelliteDevice extends Device {
     this.address = address;
   }
 
+  setToken(token) {
+    this.setStoreValue('token', token);
+    this.token = token;
+  }
 }
 
 module.exports = HomeySatelliteDevice;

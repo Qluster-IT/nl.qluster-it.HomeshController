@@ -136,11 +136,24 @@ class SatelliteDriver extends Driver {
     });
 
   }
-
+  
+  async onRepair(session, device) {
+    
+    session.setHandler('pincode', async (pincode) => {
+      // The pincode is given as an array of the filled in values
+      let authorization = await this.getAuthorization({device, pincode:pincode.join('')});
+      if(authorization && authorization.token) {
+        device.setToken(authorization.token);
+        device.setAvailable();
+        return true;
+      }
+      return false;
+    });
+  }
   getAuthorization({device, pincode}) {
     let defer = new Defer();
     //https://${device.store.address.replace('.','-')}.homey.homeylocal.com/api/app/nl.qluster-it.HominySatellite/getauthorization/
-    httpPost({url:`http://${device.store.address}/api/app/nl.qluster-it.HominySatellite/getauthorization/`, body:{pincode}})
+    httpPost({url:`http://${device.address || device.store.address}/api/app/nl.qluster-it.HominySatellite/getauthorization/`, body:{pincode}})
     .then((body,b)=>{
       this.log('getAuthorization successfull', body);
       
@@ -159,10 +172,7 @@ class SatelliteDriver extends Driver {
       body:{token:device.token, query}
     })
     .then((body,b)=>  defer.resolve(body) )
-    .catch((error,b)=>{
-      this.error('getFlowEventNames error', error);
-      defer.reject(error);
-    });
+    .catch((error,b)=> this.handleError({id:'getFlowEventNames', error, device, defer}));
     return defer.promise;
   }
 
@@ -173,15 +183,16 @@ class SatelliteDriver extends Driver {
       body:{token:device.token, name, text1, number1, boolean1}
     })
     .then((body,b)=>  defer.resolve(body) )
-    .catch((error,b)=>{
-      this.error('getFlowEventNames error', error);
-      defer.reject(error);
-    });
+    .catch((error,b)=> this.handleError({id:'startFlow', error, device, defer}));
     return defer.promise;
   }
 
   
-
+async handleError({id, error, device, defer}) {
+  this.error('getFlowEventNames error', error);
+  defer.reject(error);
+  device.setUnavailable('Token invalid! Repair your device.');
+}
 
   async getEventNames({ targetCard, query, args, isAction = false } = {}) {
     let r = (await this.getFlowEventNames({device:args.device, query:query}));//.map(x=>{ return {name:x};} );
