@@ -1,0 +1,24 @@
+{
+    "id": "action_satellite_play_url",
+    "title": {
+      "en": "Play URL",
+      "nl": "Speel URL"
+    },
+    "titleFormatted": {
+      "en": "Play [[url]]",
+      "nl": "Speel [[url]]"
+    },
+    "hint": "URL",
+    "args": [
+    {
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=satellite"
+    },
+      {
+        "name": "url",
+        "type": "text",
+        "placeholder": "Url"
+      }
+    ]
+  }

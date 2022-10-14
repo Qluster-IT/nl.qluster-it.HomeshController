@@ -12,9 +12,30 @@ class SatelliteDriver extends Driver {
   async onInit() {
     this.log('SatelliteDriver has been initialized');
 
+    
+    const action_satellite_play_url = this.homey.flow.getActionCard('action_satellite_play_url');
+    action_satellite_play_url.registerRunListener(( ( args, state ) => {
+      var defer = new Defer();
+        try {
+          if(!args.url) return Promise.resolve(false);
+                    
+          this.playUrl(args)
+          .then((res)=>{
+            if(res===true) defer.resolve(res);
+            else defer.reject(res);
+          })
+          .catch((err)=>{
+            defer.reject(err);
+          });
+      } catch (error) { 
+        console.log('Error: ' + error);
+        defer.reject('Something went wrong with the url.');
+      }
+      return defer.promise;
+    }).bind(this));
 
     
-    //#region Actioncards Looper
+    //#region Actioncards startFlow
     var actions = this.actions = [
       { id: 'action__satellite_startflow__text1_number1_boolean1' }
     ];
@@ -27,40 +48,19 @@ class SatelliteDriver extends Driver {
       actionCard.registerRunListener(async (args, state, more) => { //async
         var defer = new Defer();
         try {
-          //console.log(action.id + '.registerRunListener args: ');
-          //console.log(args);
           args.name  = args.name || { name: args.namebytag } ;
-
-          //delete args.name;
           delete args.namebytag;
-
-            for (let j = 1; j <= action.textCount; j++) if (args['text' + j.toString()] === undefined) args['text' + j.toString()] = "";
-            for (let j = 1; j <= action.numberCount; j++) if (args['number' + j.toString()] === undefined) args['number' + j.toString()] = 0;
-            for (let j = 1; j <= action.booleanCount; j++) if (args['boolean' + j.toString()] === undefined) args['boolean' + j.toString()] = false;
+          for (let j = 1; j <= action.textCount; j++) if (args['text' + j.toString()] === undefined) args['text' + j.toString()] = "";
+          for (let j = 1; j <= action.numberCount; j++) if (args['number' + j.toString()] === undefined) args['number' + j.toString()] = 0;
+          for (let j = 1; j <= action.booleanCount; j++) if (args['boolean' + j.toString()] === undefined) args['boolean' + j.toString()] = false;
             
-
-            
-            
-            let promise = this.startFlow(args);
-            
-            if (!(args.waittofinish === false)) {
-              return await promise;
-            } else {
-              return {text1:'', number1:0, boolean1:false};
-            }
-
-            // else {
-            //   // Promise.all(promises)
-            //   //   .then(x => {
-            //   //     let a = recievedTokens;
-            //   //     defer.resolve(recievedTokens || tokens);
-            //   //     delete this.returns[newArgs.name.name].list[this.returns[newArgs.name.name].count];
-            //   //   })
-            //   //   .catch(err => {
-            //   //     defer.reject(err);
-            //   //     delete this.returns[newArgs.name.name].list[this.returns[newArgs.name.name].count];
-            //   //   });
-            // }
+          let promise = this.startFlow(args);
+          
+          if (!(args.waittofinish === false)) {
+            return await promise;
+          } else {
+            return {text1:'', number1:0, boolean1:false};
+          }
         } catch (error) {
           console.log('Error: ' + error);
           defer.reject(error);
@@ -74,11 +74,6 @@ class SatelliteDriver extends Driver {
           return await this.getEventNames({ targetCard: action.triggerCard, query: query, args: args, isAction: true });
         } catch (error) { this.error('action.name.registerAutocompleteListener.error :', error); throw error; }
       });
-
-      // actionCard.on("update", async () => {
-      //   this.setArgumentValues(action, actionCard);
-      // });
-      // this.setArgumentValues(action, actionCard);
     }
 
     //#endregion
@@ -150,6 +145,8 @@ class SatelliteDriver extends Driver {
       return false;
     });
   }
+
+
   getAuthorization({device, pincode}) {
     let defer = new Defer();
     //https://${device.store.address.replace('.','-')}.homey.homeylocal.com/api/app/nl.qluster-it.HominySatellite/getauthorization/
@@ -187,11 +184,26 @@ class SatelliteDriver extends Driver {
     return defer.promise;
   }
 
+
+  playUrl({device, url}) {
+    let defer = new Defer();
+    httpPost({
+      url:`http://${device.address}/api/app/nl.qluster-it.HominySatellite/playUrl/`, 
+      body:{token:device.token, url}
+    })
+    .then((body,b)=>  defer.resolve(body) )
+    .catch((error,b)=> this.handleError({id:'startUrl', error, device, defer}));
+    return defer.promise;
+  }
+
+
+
+
   
 async handleError({id, error, device, defer}) {
   this.error('getFlowEventNames error', error);
   defer.reject(error);
-  device.setUnavailable('Token invalid! Repair your device.');
+  //device.setUnavailable('Token invalid! Repair your device.');
 }
 
   async getEventNames({ targetCard, query, args, isAction = false } = {}) {
