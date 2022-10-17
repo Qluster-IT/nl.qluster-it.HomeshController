@@ -13,6 +13,34 @@ class SatelliteDriver extends Driver {
   async onInit() {
     this.log('SatelliteDriver has been initialized');
 
+
+    
+    const action_satellite_set_screensaver = this.homey.flow.getActionCard('action_satellite_set_screensaver');
+    action_satellite_set_screensaver.registerRunListener(( args, state ) => {
+      var defer = new Defer();
+        try {
+          if(!args.screensaver) return Promise.resolve(false);
+
+          this.post('setScreensaver', args)
+          .then((res)=>{
+            if(res===true) defer.resolve(res);
+            else defer.reject(res);
+          })
+          .catch((err)=>{
+            defer.reject(err);
+          });
+      } catch (error) { 
+        console.log('Error: ' + error);
+        defer.reject('Something went wrong: ' +error);
+      }
+      return defer.promise;
+    });
+    action_satellite_set_screensaver.getArgument('screensaver').registerAutocompleteListener(async (query, args)=> {
+      return await this.post('getScreensavers', args);
+    });
+
+
+
     
     const action_satellite_play_url = this.homey.flow.getActionCard('action_satellite_play_url');
     action_satellite_play_url.registerRunListener(( args, state ) => {
@@ -43,7 +71,7 @@ class SatelliteDriver extends Driver {
         try {
           if(!args.file) return Promise.resolve(false);
 
-          this.playSoundboard(args)
+          this.post('playSoundboard', args)
           .then((res)=>{
             if(res===true) defer.resolve(res);
             else defer.reject(res);
@@ -59,7 +87,7 @@ class SatelliteDriver extends Driver {
     });    
     action_satellite_play_soundboard.getArgument('file').registerAutocompleteListener(async (query, args) => {
       try {
-        let r = await this.getSoundboards(args);
+        let r = await this.post('getSoundboards', args);
         return r;
       } catch (error) { this.error('action_satellite_play_soundboard.file.registerAutocompleteListener.error :', error); throw error; }
     });
@@ -84,7 +112,7 @@ class SatelliteDriver extends Driver {
           const languagecode = settings && settings.languagecode ? settings.languagecode : 'en-GB';
           const url = googleTTS.getAudioUrl(args.text, { lang:languagecode, slow: start.slow });
 
-          this.playUrl({device:args.device, url});
+          this.post('playUrl', {device:args.device, url});
           //this.Triggers.urlTrigger.Card.trigger(args.device, {url:url, text:args.text} );
 
           defer.resolve(start.af ? {url:url, text:args.text} : true);
@@ -105,7 +133,7 @@ class SatelliteDriver extends Driver {
         try {
           if(!args.device || !args.text) return defer.resolve(false);
 
-          this.sayAthom(args);
+          this.post('sayAthom', args);
           defer.resolve(true);
 
         } catch (error) { console.log('Error: ' + error); defer.resolve('An error occured'); }
@@ -134,7 +162,7 @@ class SatelliteDriver extends Driver {
             for (let j = 1; j <= action.numberCount; j++) if (args['number' + j.toString()] === undefined) args['number' + j.toString()] = 0;
             for (let j = 1; j <= action.booleanCount; j++) if (args['boolean' + j.toString()] === undefined) args['boolean' + j.toString()] = false;
               
-            let promise = this.startFlow(args);
+            let promise = this.post('startFlow', args);
             
             if (!args.waittofinish || args.waittofinish=='waittofinish' ) {
               return await promise;
@@ -242,82 +270,39 @@ class SatelliteDriver extends Driver {
     return defer.promise;
   }
 
-  getFlowEventNames({device, query}) {
+  
+  post(callName, args) {
+    let device = args.device;
+    delete args.device;
+    args.token = device.token;
     let defer = new Defer();
     httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/getFlowEventNames/`, 
-      body:{token:device.token, query}
+      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/${callName}/`, 
+      body:args
     })
-    .then((body,b)=>  defer.resolve(body) )
-    .catch((error,b)=> this.handleError({id:'getFlowEventNames', error, device, defer}));
-    return defer.promise;
-  }
-
-  startFlow({device, name, text1, number1, boolean1}) {
-    let defer = new Defer();
-    httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/startFlow/`, 
-      body:{token:device.token, name, text1, number1, boolean1}
-    })
-    .then((body,b)=>  defer.resolve(body) )
-    .catch((error,b)=> this.handleError({id:'startFlow', error, device, defer}));
-    return defer.promise;
-  }
-
-
-  playUrl({device, url}) {
-    let defer = new Defer();
-    httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/playUrl/`, 
-      body:{token:device.token, url}
-    })
-    .then((body,b)=>  defer.resolve(body) )
-    .catch((error,b)=> this.handleError({id:'playUrl', error, device, defer}));
-    return defer.promise;
-  }
-
-  sayAthom({device, text}) {
-    let defer = new Defer();
-    httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/sayAthom/`, 
-      body:{token:device.token, text}
-    })
-    .then((body,b)=>  defer.resolve(body) )
-    .catch((error,b)=> this.handleError({id:'sayAthom', error, device, defer}));
-    return defer.promise;
-  }
-
-  getSoundboards({device}) {
-    let defer = new Defer();
-    httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/getSoundboards/`, 
-      body:{token:device.token}
-    })
-    .then((body,b)=>  defer.resolve(body) )
-    .catch((error,b)=> this.handleError({id:'sayAthom', error, device, defer}));
-    return defer.promise;
-  }
-
-  playSoundboard({device, file}) {
-    let defer = new Defer();
-    httpPost({
-      url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/playSoundboard/`, 
-      body:{token:device.token, file}
-    })
-    .then((body,b)=>  defer.resolve(body) )
-    .catch((error,b)=> this.handleError({id:'sayAthom', error, device, defer}));
-    return defer.promise;
+    .then((body,b)=> {
+      if(body && body.__error__) defer.reject(body.__error__);      
+      else defer.resolve(body);
+     })
+    .catch((error,b)=> this.handleError({id:'post:'+callName, error, device, defer}));
+    return defer.promise;  
   }
 
   
 async handleError({id, error, device, defer}) {
   this.error('getFlowEventNames error', error);
-  defer.reject(error);
+  switch (error.message) {
+    case 'HTTP status code 404':
+      return defer.reject(new Error('Are you sure you have the Homey Satellite App running on the satellite device?'));
+    default:
+      break;
+  }
+  defer.reject(typeof(error)=='string' ? new Error(error) : error);
   //device.setUnavailable('Token invalid! Repair your device.');
 }
 
   async getEventNames({ targetCard, query, args, isAction = false } = {}) {
-    let r = (await this.getFlowEventNames({device:args.device, query:query}));//.map(x=>{ return {name:x};} );
+    let r = (await this.post('getFlowEventNames', {device:args.device, query:query}));//.map(x=>{ return {name:x};} );
     return r;
   }
 

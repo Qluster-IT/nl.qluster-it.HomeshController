@@ -105,6 +105,36 @@
         ]
       },
       {
+        "id": "action_satellite_set_screensaver",
+        "title": {
+          "en": "Set Screensaver",
+          "nl": "Zet Screensaver"
+        },
+        "titleFormatted": {
+          "en": "Set [[screensaver]]",
+          "nl": "Zet [[screensaver]]"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=satellite"
+          },
+          {
+            "name": "screensaver",
+            "type": "autocomplete",
+            "title": {
+              "en": "Screensaver",
+              "nl": "Screensaver"
+            },
+            "placeholder": {
+              "en": "Select screensaver",
+              "nl": "Selecteer screensaver"
+            }
+          }
+        ]
+      },
+      {
         "id": "action_satellite_say_athom",
         "title": {
           "en": "Start TTS (Athom)",
