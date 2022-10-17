@@ -1,12 +1,12 @@
 {
-    "id": "action_satellite_say",
+    "id": "action_satellite_set_screensaver",
     "title": {
-      "en": "Start TTS (Google)",
-      "nl": "Begin TTS (Google)"
+      "en": "Set Screensaver",
+      "nl": "Zet Screensaver"
   },
   "titleFormatted": {
-      "en": "Say [[text]] (Google)",
-      "nl": "Zeg [[text]] (Google)"
+      "en": "Set [[screensaver]]",
+      "nl": "Zet [[screensaver]]"
   },
   "args": [
     {
@@ -15,11 +15,15 @@
         "filter": "driver_id=satellite"
     },
       {
-          "name": "text",
-          "type": "text",
+          "name": "screensaver",
+          "type": "autocomplete",
+          "title": {
+              "en": "Screensaver",
+              "nl": "Screensaver"
+          },
           "placeholder": {
-              "en": "Text",
-              "nl": "Tekst"
+              "en": "Select screensaver",
+              "nl": "Selecteer screensaver"
           }
       }
   ]
