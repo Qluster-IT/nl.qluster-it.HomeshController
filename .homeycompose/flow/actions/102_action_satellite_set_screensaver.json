@@ -1,0 +1,26 @@
+{
+    "id": "action_satellite_say",
+    "title": {
+      "en": "Start TTS (Google)",
+      "nl": "Begin TTS (Google)"
+  },
+  "titleFormatted": {
+      "en": "Say [[text]] (Google)",
+      "nl": "Zeg [[text]] (Google)"
+  },
+  "args": [
+    {
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=satellite"
+    },
+      {
+          "name": "text",
+          "type": "text",
+          "placeholder": {
+              "en": "Text",
+              "nl": "Tekst"
+          }
+      }
+  ]
+  }
