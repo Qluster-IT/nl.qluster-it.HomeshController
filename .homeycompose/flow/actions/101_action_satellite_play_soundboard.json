@@ -18,7 +18,7 @@
       {
         "name": "file",
         "type": "autocomplete",
-        "placeholder": "Url"
+        "placeholder": "File"
       }
     ]
   }

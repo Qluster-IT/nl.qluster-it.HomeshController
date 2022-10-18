@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+	<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+	<script type="text/javascript" src="../assets/js/angular.js"></script>
+	<script type="text/javascript" src="../assets/js/lodash.js"></script>
+	<script type="text/javascript" src="../assets/js/smart-table.min.js"></script>
+	<script type="text/javascript" src="/manager/webserver/assets/js/jquery.js"></script>
+	
+	<link rel="stylesheet" href="../assets/fontawesome/fontawesome.css" type="text/css"/>
+	<link rel="stylesheet" href="../assets/css/default.css" type="text/css"/>
+</head>
+
+<body ng-app="homeshcontroller" ng-controller="homeshcontrollerCtrl as homeshcontroller">
+	<form name="mainForm">
+		<div class="field">
+			<div class="field margin-bottom">
+				Micro Web Server
+			</div>
+			<div class="label">Ftp Port: </div>
+			<input class="value" type="text" max="65536" min="0" step="1" pattern="[0-9]{1,5}" maxlength="5" minlength="1" ng-model="vars.microWebServerFtpPort"/>
+
+			<button class="field margin-top" ng-click="mainForm.$valid && vars.microWebServerFtpPort ? updatemicroWebServerFtpPort() : null" ng-disabled="!mainForm.$valid || !vars.microWebServerFtpPort">Update Settings</div>
+		</div>
+	</form>
+
+	<div id="overlay"></div>
+	<script type="text/javascript">
+
+		angular.module('homeshcontroller', ['smart-table'])
+			.controller("homeshcontrollerCtrl", ['$scope', '$rootScope', '$timeout', '$compile', '$q', function ($scope, $rootScope, $timeout, $compile, $q) {
+				//let $;
+				var Homey;
+				const vars = $scope.vars = {microWebServerFtpPort:undefined};
+				$scope.stamp = Date.now();
+
+
+				$scope.$on('ready', function ($e, Homey_) {
+					let promises = [];
+					
+					Homey = Homey_;
+					$scope.__ = Homey.__;
+					promises.push(get('microWebServerFtpPort', (microWebServerFtpPort)=> vars.microWebServerFtpPort=microWebServerFtpPort));
+					
+					// Homey.on('settings.set', (key, val)=> {
+					// 	switch (key) {
+					// 		case "token":
+					// 			get('token', (token)=> vars.token=token)
+					// 			break;
+					// 	}
+
+					// })
+
+					Promise.all(promises)
+					.then(()=>{})
+					.catch((err)=>{						
+						return Homey.alert(err);
+					})
+					.finally(()=>{						
+						Homey.ready();
+					})
+
+				});
+
+				$scope.updatemicroWebServerFtpPort = function() {
+					Homey.set('microWebServerFtpPort', vars.microWebServerFtpPort );
+				}
+
+				
+				async function get(settingKey, fc) {
+					let defer = $q.defer();
+					Homey.get(settingKey, (err, val)=> {
+						if(err) {
+							defer.reject(err);
+							return Homey.alert(err);
+						}
+						$scope.$apply(()=> {
+							if(fc) fc(val);
+							defer.resolve(val);
+						});
+					})
+					return defer.promise;
+				}
+
+			}])
+			.directive('ngEnter', function () {
+				return function (scope, element, attrs) {
+					element.bind('keydown keypress', function (event) {
+						if (event.which === 13) {
+							scope.$apply(function () {
+								scope.$eval(attrs.ngEnter || attrs.ngClick, {
+									$event: event
+								});
+							});
+							event.preventDefault();
+						}
+					});
+				};
+			})
+			.directive('tooltip', function ($compile) {
+				var contentContainer;
+				return {
+					restrict: "A",
+					scope: {
+						myTooltipScope: "="
+					},
+					link: function (scope, element, attrs) {
+						var text = attrs.tooltip;
+
+						scope.hidden = true;
+
+						var tooltipElement = angular.element("<div ng-hide='hidden' class='tooltip'>");
+						tooltipElement.append("<div>" + text.replaceAll('\r\n', '<br/>') + "</div>");
+
+						element.parent().append(tooltipElement);
+						element
+							.on('mouseenter', function () { scope.hidden = false; scope.$digest(); })
+							.on('mouseleave', function () { scope.hidden = true; scope.$digest(); });
+
+						var toolTipScope = scope.$new(true);
+						angular.extend(toolTipScope, scope.myTooltipScope);
+						$compile(tooltipElement.contents())(toolTipScope);
+						$compile(tooltipElement)(scope);
+					}
+				};
+			});
+
+		function onHomeyReady(Homey) {
+			console.log('onHomeyReady');
+			var scope = angular.element(document.body).scope();
+			scope.$emit('ready', Homey, $);//, $);
+		}
+	</script>
+</body>
+
+</html>

@@ -9,6 +9,7 @@
     "@types/node": "^18.8.5"
   },
   "dependencies": {
+    "basic-ftp": "^5.0.2",
     "google-tts-api": "^2.0.2",
     "lodash-core": "^4.17.19"
   }
