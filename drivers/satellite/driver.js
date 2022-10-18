@@ -4,6 +4,7 @@ const googleTTS = require('google-tts-api');
 const { Driver } = require('homey');
 const { httpsGet, Defer, httpsPost, httpPost } = require('../../lib/proto');
 const _ = require('lodash-core');
+const FtpClient = require('../../lib/ftp-client');
 
 class SatelliteDriver extends Driver {
 
@@ -12,6 +13,12 @@ class SatelliteDriver extends Driver {
    */
   async onInit() {
     this.log('SatelliteDriver has been initialized');
+    this.ftpClient = new FtpClient();
+    this.ftpClient.init({ip:this.homey.app.ip, port:this.homey.app.microWebServerFtpPort});
+    this.homey.app.on('microWebServerFtpPort', (microWebServerFtpPort)=> {
+      this.ftpClient.init({ip:this.homey.app.ip, port:microWebServerFtpPort});
+    });
+
 
 
     
@@ -93,6 +100,43 @@ class SatelliteDriver extends Driver {
     });
 
     
+    const action_satellite_play_microwebserver = this.homey.flow.getActionCard('action_satellite_play_microwebserver');
+    action_satellite_play_microwebserver.registerRunListener(( args, state ) => {
+      var defer = new Defer();
+        try {
+          if(!args.file) return Promise.resolve(false);
+          if(args && args.file && args.file.isFile!=='true') return Promise.reject(new Error('A file must be selected.'));
+
+          let url = 'http://192.168.1.17:5080/' + args.file.id;
+          
+          this.post('playUrl', {device:args.device, url})
+          .then((res)=>{
+            if(res===true) defer.resolve(res);
+            else defer.reject(res);
+          })
+          .catch((err)=>{
+            defer.reject(err);
+          });
+      } catch (error) { 
+        console.log('Error: ' + error);
+        defer.reject('Something went wrong with the play Micro Web Server.');
+      }
+      return defer.promise;
+    });    
+    action_satellite_play_microwebserver.getArgument('file').registerAutocompleteListener(async (query, args) => {
+      try {
+        let path = (args.file ? (args.file.isDirectory==='true' ? args.file.id : args.file.path) : query) || '';
+        let pathsAbove = path.split('/');
+        pathsAbove.pop();
+        let pathAbove = pathsAbove.join('/');
+
+        let r = await this.getFtpList({path});
+        if(pathAbove && pathAbove.length) r.unshift({id:pathAbove, name:'..', description:pathAbove});
+
+        return r.map(x=>{return {id:`${path}${path?'/':''}${x.name}`, name:`${path}${path?'/':''}${x.name}`, path, description:path, isDirectory:x.isDirectory, isFile:x.isFile}; });
+      } catch (error) { this.error('action_satellite_play_microwebserver.file.registerAutocompleteListener.error :', error); throw error; }
+    });
+
     
     var says = [
       {id:'action_satellite_say', slow:false}
@@ -187,6 +231,15 @@ class SatelliteDriver extends Driver {
     //#endregion
 
 
+  }
+
+
+  async getFtpClient() {    
+    if(!this.ftpClient) this.ftpClient = new FtpClient();
+    return this.ftpClient;
+  }
+  async getFtpList({path}) {
+    return this.ftpClient.getList({path}) ;
   }
 
   /**
