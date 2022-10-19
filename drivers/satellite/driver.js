@@ -253,7 +253,7 @@ class SatelliteDriver extends Driver {
 
     const devices = Object.values(discoveryResults).map((discoveryResult) => {
       return {
-        name: discoveryResult.txt.name,
+        name: discoveryResult.txt.name ,
         data: {
           id: discoveryResult.id,
         },
