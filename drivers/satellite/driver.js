@@ -105,7 +105,7 @@ class SatelliteDriver extends Driver {
       var defer = new Defer();
         try {
           if(!args.file) return Promise.resolve(false);
-          if(args && args.file && args.file.isFile!=='true') return Promise.reject(new Error('A file must be selected.'));
+          if(args && args.file && args.file.isFile!=='true' && args.file.isFile !== true) return Promise.reject(new Error('A file must be selected.'));
 
           let url = 'http://192.168.1.17:5080/' + args.file.id;
           
@@ -129,11 +129,14 @@ class SatelliteDriver extends Driver {
         let pathsAbove = path.split('/');
         pathsAbove.pop();
         let pathAbove = pathsAbove.join('/');
+        let r = await args.device.ftpClient.getList({path});
+        
+        
+        r = r.map(x=>{return {id:`${path}${path?'/':''}${x.name}`, name:`${path}${path?'/':''}${x.name}`, path, description:path, isDirectory:x.isDirectory, isFile:x.isFile}; });        
+        r = _.orderBy(r, x=>(x.isDirectory ? '0.' : '1.') + x.name);
+        if(pathAbove && pathAbove.length) r.unshift({id:pathAbove, name:pathAbove, description:'..', isDirectory:true, isFile:false});
+        return r;
 
-        let r = await this.getFtpList({path});
-        if(pathAbove && pathAbove.length) r.unshift({id:pathAbove, name:'..', description:pathAbove});
-
-        return r.map(x=>{return {id:`${path}${path?'/':''}${x.name}`, name:`${path}${path?'/':''}${x.name}`, path, description:path, isDirectory:x.isDirectory, isFile:x.isFile}; });
       } catch (error) { this.error('action_satellite_play_microwebserver.file.registerAutocompleteListener.error :', error); throw error; }
     });
 
