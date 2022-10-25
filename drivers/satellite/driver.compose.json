@@ -27,7 +27,7 @@
       "template": "pincode",
       "options": {
         "title": "Enter pincode:",
-        "hint": "Enter the Homey Satellite's pincode",
+        "hint": "Enter the Homey Satellite's pincode (Shown in the App Settings on the Satellite)",
         "type": "number",
         "length": 4
       }
@@ -43,7 +43,7 @@
       "template": "pincode",
       "options": {
         "title": "Enter pincode:",
-        "hint": "Enter the Homey Satellite's pincode",
+        "hint": "Enter the Homey Satellite's pincode (Shown in the App Settings on the Satellite)",
         "type": "number",
         "length": 4
       }

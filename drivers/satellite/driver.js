@@ -129,7 +129,7 @@ class SatelliteDriver extends Driver {
         let pathsAbove = path.split('/');
         pathsAbove.pop();
         let pathAbove = pathsAbove.join('/');
-        let r = await args.device.ftpClient.getList({path});
+        let r = await this.getFtpList({path});
         
         
         r = r.map(x=>{return {id:`${path}${path?'/':''}${x.name}`, name:`${path}${path?'/':''}${x.name}`, path, description:path, isDirectory:x.isDirectory, isFile:x.isFile}; });        
@@ -263,8 +263,12 @@ class SatelliteDriver extends Driver {
         store:{address:discoveryResult.address}
       };
     });
+    let foundDevices = [];
+    for (const device of devices) {
+      if(await this.isOnline(device.store.address)) foundDevices.push(device);
+    }
 
-    return devices;
+    return foundDevices;
   }
 
   async onPair(session) {
@@ -310,6 +314,20 @@ class SatelliteDriver extends Driver {
     });
   }
 
+
+  async isOnline(address) {
+    let defer = new Defer();
+    //https://${device.store.address.replace('.','-')}.homey.homeylocal.com/api/app/nl.qluster-it.HomeshSatellite/getauthorization/
+    httpPost({url:`http://${address}/api/app/nl.qluster-it.HomeshSatellite/isonline/`, body:{}})
+    .then((body,b)=>{
+      this.log('isOnline successfull', body);
+      defer.resolve(true);
+    }).catch((error,b)=>{
+      this.error('getAuthorization error', error);
+      defer.resolve(false);
+    });
+    return defer.promise;
+  }
 
   getAuthorization({device, pincode}) {
     let defer = new Defer();

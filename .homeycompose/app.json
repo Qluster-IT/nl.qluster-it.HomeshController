@@ -1,6 +1,6 @@
 {
   "id": "nl.qluster-it.HomeshController",
-  "version": "0.0.4",
+  "version": "0.9.0",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -20,10 +20,30 @@
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",
     "xlarge": "/assets/images/xlarge.png"
+  },  
+  "source": "https://bitbucket.org/QlusterIT/nl.qluster-it.homeshcontroller/",
+  "bugs": {
+    "url": "https://bitbucket.org/QlusterIT/nl.qluster-it.homeshcontroller/issues"
+  },
+  "homeyCommunityTopicId": 70369,
+  
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "QlusterIT"
+      }
+    }
   },
   "author": {
     "name": "Arie J. Godschalk",
     "email": "arie@qluster-it.nl"
+  },
+  "contributors": {
+    "translators": [
+      {
+        "name": "Johan Bendz (imagery)"
+      }
+    ]
   },
   "support": "mailto:arie@qluster-it.nl",
   "brandColor": "#0066a4"
