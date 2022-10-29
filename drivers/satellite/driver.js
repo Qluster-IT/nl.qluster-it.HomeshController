@@ -105,7 +105,7 @@ class SatelliteDriver extends Driver {
       var defer = new Defer();
         try {
           if(!args.file) return Promise.resolve(false);
-          if(args && args.file && args.file.isFile!=='true') return Promise.reject(new Error('A file must be selected.'));
+          if(args && args.file && args.file.isFile!=='true' && args.file.isFile !== true) return Promise.reject(new Error('A file must be selected.'));
 
           let url = 'http://192.168.1.17:5080/' + args.file.id;
           
@@ -129,11 +129,14 @@ class SatelliteDriver extends Driver {
         let pathsAbove = path.split('/');
         pathsAbove.pop();
         let pathAbove = pathsAbove.join('/');
-
         let r = await this.getFtpList({path});
-        if(pathAbove && pathAbove.length) r.unshift({id:pathAbove, name:'..', description:pathAbove});
+        
+        
+        r = r.map(x=>{return {id:`${path}${path?'/':''}${x.name}`, name:`${path}${path?'/':''}${x.name}`, path, description:path, isDirectory:x.isDirectory, isFile:x.isFile}; });        
+        r = _.orderBy(r, x=>(x.isDirectory ? '0.' : '1.') + x.name);
+        if(pathAbove && pathAbove.length) r.unshift({id:pathAbove, name:pathAbove, description:'..', isDirectory:true, isFile:false});
+        return r;
 
-        return r.map(x=>{return {id:`${path}${path?'/':''}${x.name}`, name:`${path}${path?'/':''}${x.name}`, path, description:path, isDirectory:x.isDirectory, isFile:x.isFile}; });
       } catch (error) { this.error('action_satellite_play_microwebserver.file.registerAutocompleteListener.error :', error); throw error; }
     });
 
@@ -253,15 +256,19 @@ class SatelliteDriver extends Driver {
 
     const devices = Object.values(discoveryResults).map((discoveryResult) => {
       return {
-        name: discoveryResult.txt.name,
+        name: discoveryResult.txt.name ,
         data: {
           id: discoveryResult.id,
         },
         store:{address:discoveryResult.address}
       };
     });
+    let foundDevices = [];
+    for (const device of devices) {
+      if(await this.isOnline(device.store.address)) foundDevices.push(device);
+    }
 
-    return devices;
+    return foundDevices;
   }
 
   async onPair(session) {
@@ -307,6 +314,20 @@ class SatelliteDriver extends Driver {
     });
   }
 
+
+  async isOnline(address) {
+    let defer = new Defer();
+    //https://${device.store.address.replace('.','-')}.homey.homeylocal.com/api/app/nl.qluster-it.HomeshSatellite/getauthorization/
+    httpPost({url:`http://${address}/api/app/nl.qluster-it.HomeshSatellite/isonline/`, body:{}})
+    .then((body,b)=>{
+      this.log('isOnline successfull', body);
+      defer.resolve(true);
+    }).catch((error,b)=>{
+      this.error('getAuthorization error', error);
+      defer.resolve(false);
+    });
+    return defer.promise;
+  }
 
   getAuthorization({device, pincode}) {
     let defer = new Defer();
