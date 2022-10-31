@@ -1,14 +1,17 @@
 {
     "id": "action_satellite_play_microwebserver",
     "title": {
-      "en": "Play Micro Web Server file",
-      "nl": "Speel Micro Web Server bestand"
+      "en": "Play Controller's Micro Web Server sound",
+      "nl": "Speel Controller's Micro Web Server geluid"
     },
     "titleFormatted": {
-      "en": "Play [[file]] (Micro Web Server)",
-      "nl": "Speel [[file]] (Micro Web Server)"
+      "en": "Play [[file]] (Controller's Micro Web Server)",
+      "nl": "Speel [[file]] (Controller's Micro Web Server)"
     },
-    "hint": "URL",
+    "hint": {
+      "en": "Play's a soundfile from the Controller's Micro Web Server on the Satellite.",
+      "nl": "Speel een geluidsbestand af van de Controller's Micro Web Server op de Satelliet."
+    },
     "args": [
     {
         "name": "device",

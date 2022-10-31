@@ -1,14 +1,17 @@
 {
     "id": "action_satellite_play_soundboard",
     "title": {
-      "en": "Play Soundboard",
-      "nl": "Speel Soundboard"
+      "en": "Play Satellite's Soundboard Sound",
+      "nl": "Speel Satelliet Soundboard geluid"
     },
     "titleFormatted": {
-      "en": "Play [[file]] (Soundboard)",
-      "nl": "Speel [[file]] (Soundboard)"
+      "en": "Play [[file]] (Satellite's Soundboard)",
+      "nl": "Speel [[file]] (Satelliet's Soundboard)"
     },
-    "hint": "URL",
+    "hint": {
+      "en": "Play's a soundfile from the Satellite's Soundboard on the Satellite.",
+      "nl": "Speel een geluidsbestand af van de Satelliet's Soundboard op de Satelliet."
+    },
     "args": [
     {
         "name": "device",
