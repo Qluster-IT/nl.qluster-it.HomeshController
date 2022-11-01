@@ -8,7 +8,6 @@
       "en": "Play [[url]]",
       "nl": "Speel [[url]]"
     },
-    "hint": "URL",
     "args": [
     {
         "name": "device",

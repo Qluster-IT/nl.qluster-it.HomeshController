@@ -1,5 +1,14 @@
 {
   "0.9.2": {
     "en": "First release!"
+  },  
+  "0.9.3": {
+    "en": "Improved: Hints."
+  },  
+  "0.9.4": {
+    "en": "Improved: Readme and Store description."
+  },
+  "0.9.5": {
+    "en": "Added: Contribution options: Patreon and GithubSponsors (with PayPal already available)."
   }
 }

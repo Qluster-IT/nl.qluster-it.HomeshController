@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "nl.qluster-it.HomeshController",
-  "version": "0.9.2",
+  "version": "0.9.5",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -31,6 +31,12 @@
     "donate": {
       "paypal": {
         "username": "QlusterIT"
+      },
+      "patreon": {
+        "username": "QlusterIT"
+      },
+      "githubSponsors": {
+        "username": "XeroxQ"
       }
     }
   },
@@ -52,14 +58,17 @@
       {
         "id": "action_satellite_play_microwebserver",
         "title": {
-          "en": "Play Micro Web Server file",
-          "nl": "Speel Micro Web Server bestand"
+          "en": "Play Controller's Micro Web Server sound",
+          "nl": "Speel Controller's Micro Web Server geluid"
         },
         "titleFormatted": {
-          "en": "Play [[file]] (Micro Web Server)",
-          "nl": "Speel [[file]] (Micro Web Server)"
+          "en": "Play [[file]] (Controller's Micro Web Server)",
+          "nl": "Speel [[file]] (Controller's Micro Web Server)"
         },
-        "hint": "URL",
+        "hint": {
+          "en": "Play's a soundfile from the Controller's Micro Web Server on the Satellite.",
+          "nl": "Speel een geluidsbestand af van de Controller's Micro Web Server op de Satelliet."
+        },
         "args": [
           {
             "name": "device",
@@ -76,14 +85,17 @@
       {
         "id": "action_satellite_play_soundboard",
         "title": {
-          "en": "Play Soundboard",
-          "nl": "Speel Soundboard"
+          "en": "Play Satellite's Soundboard Sound",
+          "nl": "Speel Satelliet Soundboard geluid"
         },
         "titleFormatted": {
-          "en": "Play [[file]] (Soundboard)",
-          "nl": "Speel [[file]] (Soundboard)"
+          "en": "Play [[file]] (Satellite's Soundboard)",
+          "nl": "Speel [[file]] (Satelliet's Soundboard)"
         },
-        "hint": "URL",
+        "hint": {
+          "en": "Play's a soundfile from the Satellite's Soundboard on the Satellite.",
+          "nl": "Speel een geluidsbestand af van de Satelliet's Soundboard op de Satelliet."
+        },
         "args": [
           {
             "name": "device",
@@ -107,7 +119,6 @@
           "en": "Play [[url]]",
           "nl": "Speel [[url]]"
         },
-        "hint": "URL",
         "args": [
           {
             "name": "device",
