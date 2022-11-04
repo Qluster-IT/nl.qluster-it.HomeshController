@@ -107,7 +107,7 @@ class SatelliteDriver extends Driver {
           if(!args.file) return Promise.resolve(false);
           if(args && args.file && args.file.isFile!=='true' && args.file.isFile !== true) return Promise.reject(new Error('A file must be selected.'));
 
-          let url = 'http://192.168.1.17:5080/' + args.file.id;
+          let url = `http://${this.homey.app.ip}:5080/` + args.file.id;
           
           this.post('playUrl', {device:args.device, url})
           .then((res)=>{
