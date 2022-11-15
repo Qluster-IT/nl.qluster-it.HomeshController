@@ -10,5 +10,8 @@
   },
   "0.9.5": {
     "en": "Added: Contribution options: Patreon and GithubSponsors (with PayPal already available)."
+  },
+  "0.9.6": {
+    "en": "Bugfixed: Local IP reference MWS."
   }
 }
