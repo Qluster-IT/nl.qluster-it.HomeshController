@@ -16,5 +16,11 @@
   },
   "0.9.7": {
     "en": "Improved: Works with Early 2023!"
+  },
+  "0.9.8": {
+    "en": "Improved: Description."
+  },
+  "0.9.9": {
+    "en": "Improved: Some more Errorhandlings preventing app crashs."
   }
 }

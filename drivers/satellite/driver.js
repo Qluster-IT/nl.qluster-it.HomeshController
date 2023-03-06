@@ -364,13 +364,15 @@ class SatelliteDriver extends Driver {
 
   
 async handleError({id, error, device, defer}) {
-  this.error('handleError error', error);
+  this.error('handleError id', id, 'Error:', error);
   let err = error.message || error;
   switch (err) {
     case 'HTTP status code 404':
-      return defer.reject(new Error('Are you sure you have the Homey Satellite App running on the satellite device?'));
+      defer.reject(new Error('Are you sure you have the Homey Satellite App running on the satellite device?'));
+      return;
     case 'Unauthorized':
-      return defer.reject(new Error('Unauthorized. Reconnect the Satellite by repairing and re-entering the pincode.'));
+      defer.reject(new Error('Unauthorized. Reconnect the Satellite by repairing and re-entering the pincode.'));
+      return;
     default:
       break;
   }
