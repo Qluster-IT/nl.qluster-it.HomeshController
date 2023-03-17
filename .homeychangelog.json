@@ -22,5 +22,8 @@
   },
   "0.9.9": {
     "en": "Improved: Some more Errorhandlings preventing app crashs."
+  },
+  "0.9.10": {
+    "en": "Bugfixed: Update Satellite also."
   }
 }

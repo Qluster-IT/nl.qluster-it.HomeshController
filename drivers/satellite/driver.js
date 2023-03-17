@@ -203,7 +203,7 @@ class SatelliteDriver extends Driver {
         actionCard.registerRunListener(async (args, state, more) => { //async
           var defer = new Defer();
           try {
-            args.name  = args.name || args.namebytag ;
+            args.name  = args.name && args.name.name ? args.name.name : args.namebytag ;
             delete args.namebytag;
             for (let j = 1; j <= action.textCount; j++) if (args['text' + j.toString()] === undefined) args['text' + j.toString()] = "";
             for (let j = 1; j <= action.numberCount; j++) if (args['number' + j.toString()] === undefined) args['number' + j.toString()] = 0;
