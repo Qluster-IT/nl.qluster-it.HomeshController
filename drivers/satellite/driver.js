@@ -332,7 +332,7 @@ class SatelliteDriver extends Driver {
   getAuthorization({device, pincode}) {
     let defer = new Defer();
     //https://${device.store.address.replace('.','-')}.homey.homeylocal.com/api/app/nl.qluster-it.HomeshSatellite/getauthorization/
-    httpPost({url:`http://${device.address || device.store.address}/api/app/nl.qluster-it.HomeshSatellite/getauthorization/`, body:{pincode}})
+    httpPost({url:`http://${device.address}/api/app/nl.qluster-it.HomeshSatellite/getauthorization/`, body:{pincode}})
     .then((body,b)=>{
       this.log('getAuthorization successfull', body);
       
