@@ -31,5 +31,8 @@
   },
   "0.9.12": {
     "en": "Bugfixed: Update Satellite also."
+  },
+  "0.9.13": {
+    "en": "Added: Flowcards with 5 and 10 arguments."
   }
 }

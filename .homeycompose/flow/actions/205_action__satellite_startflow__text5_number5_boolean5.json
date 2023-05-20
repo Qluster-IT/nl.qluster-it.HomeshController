@@ -1,0 +1,167 @@
+{
+    "id": "action__satellite_startflow__text5_number5_boolean5",
+    "title": {
+        "en": "Start Flowcard",
+        "nl": "Start Flowkaart"
+    },
+    "titleFormatted": {
+        "en": "Start [[name]]/[[namebytag]] with ([[text1]], [[text2]], [[text3]], [[text4]], [[text5]], [[number1]], [[number2]], [[number3]], [[number4]], [[number5]], [[boolean1]], [[boolean2]], [[boolean3]], [[boolean4]], [[boolean5]])",
+        "nl": "Start [[name]]/[[namebytag]] met ([[text1]], [[text2]], [[text3]], [[text4]], [[text5]], [[number1]], [[number2]], [[number3]], [[number4]], [[number5]], [[boolean1]], [[boolean2]], [[boolean3]], [[boolean4]], [[boolean5]])"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=satellite"
+        },
+        {
+            "type": "autocomplete",
+            "required":false,
+            "name": "name",
+            "placeholder": {
+                "en": "Type or select a trigger name",
+                "nl": "Type of kies een trigger naam"
+            },
+            "title": {
+                "en": "Triggername",
+                "nl": "Triggernaam"
+            }
+        },
+        {
+            "type": "text",
+            "required":false,
+            "name": "namebytag",
+            "placeholder": {
+                "en": "Or use a Tag or text as name",
+                "nl": "Of gebruik een Tag of tekst als naam"
+            },
+            "title": {
+                "en": "Tag",
+                "nl": "Tag"
+            }
+        },
+        {
+            "type": "text",
+            "name": "text1",
+            "placeholder": {
+                "en": "Text 1",
+                "nl": "Tekst 1"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text2",
+            "placeholder": {
+                "en": "Text 2",
+                "nl": "Tekst 2"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text3",
+            "placeholder": {
+                "en": "Text 3",
+                "nl": "Tekst 3"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text4",
+            "placeholder": {
+                "en": "Text 4",
+                "nl": "Tekst 4"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text5",
+            "placeholder": {
+                "en": "Text 5",
+                "nl": "Tekst 5"
+            },
+            "required":false
+        },
+        {
+            "type": "number",
+            "name": "number1",
+            "placeholder": {
+                "en": "Number 1",
+                "nl": "Nummer 1"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number2",
+            "placeholder": {
+                "en": "Number 2",
+                "nl": "Nummer 2"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number3",
+            "placeholder": {
+                "en": "Number 3",
+                "nl": "Nummer 3"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number4",
+            "placeholder": {
+                "en": "Number 4",
+                "nl": "Nummer 4"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number5",
+            "placeholder": {
+                "en": "Number 5",
+                "nl": "Nummer 5"
+            },
+            "required":false
+        },
+        {
+            "type": "checkbox",
+            "name": "boolean1",
+            "placeholder": {
+                "en": "Yes/No 1",
+                "nl": "Ja/Nee 1"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean2",
+            "placeholder": {
+                "en": "Yes/No 2",
+                "nl": "Ja/Nee 2"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean3",
+            "placeholder": {
+                "en": "Yes/No 3",
+                "nl": "Ja/Nee 3"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean4",
+            "placeholder": {
+                "en": "Yes/No 4",
+                "nl": "Ja/Nee 4"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean5",
+            "placeholder": {
+                "en": "Yes/No 5",
+                "nl": "Ja/Nee 5"
+            },
+            "required":false
+        }
+    ]
+}

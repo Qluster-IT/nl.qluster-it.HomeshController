@@ -1,0 +1,287 @@
+{
+    "id": "action__satellite_startflow__text10_number10_boolean10",
+    "title": {
+        "en": "Start Flowcard",
+        "nl": "Start Flowkaart"
+    },
+    "titleFormatted": {
+        "en": "Start [[name]]/[[namebytag]] with ([[text1]], [[text2]], [[text3]], [[text4]], [[text5]], [[text6]], [[text7]], [[text8]], [[text9]], [[text10]], [[number1]], [[number2]], [[number3]], [[number4]], [[number5]], [[number6]], [[number7]], [[number8]], [[number9]], [[number10]], [[boolean1]], [[boolean2]], [[boolean3]], [[boolean4]], [[boolean5]], [[boolean6]], [[boolean7]], [[boolean8]], [[boolean9]], [[boolean10]])",
+        "nl": "Start [[name]]/[[namebytag]] met ([[text1]], [[text2]], [[text3]], [[text4]], [[text5]], [[text6]], [[text7]], [[text8]], [[text9]], [[text10]], [[number1]], [[number2]], [[number3]], [[number4]], [[number5]], [[number6]], [[number7]], [[number8]], [[number9]], [[number10]], [[boolean1]], [[boolean2]], [[boolean3]], [[boolean4]], [[boolean5]], [[boolean6]], [[boolean7]], [[boolean8]], [[boolean9]], [[boolean10]])"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=satellite"
+        },
+        {
+            "type": "autocomplete",
+            "required":false,
+            "name": "name",
+            "placeholder": {
+                "en": "Type or select a trigger name",
+                "nl": "Type of kies een trigger naam"
+            },
+            "title": {
+                "en": "Triggername",
+                "nl": "Triggernaam"
+            }
+        },
+        {
+            "type": "text",
+            "required":false,
+            "name": "namebytag",
+            "placeholder": {
+                "en": "Or use a Tag or text as name",
+                "nl": "Of gebruik een Tag of tekst als naam"
+            },
+            "title": {
+                "en": "Tag",
+                "nl": "Tag"
+            }
+        },
+        {
+            "type": "text",
+            "name": "text1",
+            "placeholder": {
+                "en": "Text 1",
+                "nl": "Tekst 1"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text2",
+            "placeholder": {
+                "en": "Text 2",
+                "nl": "Tekst 2"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text3",
+            "placeholder": {
+                "en": "Text 3",
+                "nl": "Tekst 3"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text4",
+            "placeholder": {
+                "en": "Text 4",
+                "nl": "Tekst 4"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text5",
+            "placeholder": {
+                "en": "Text 5",
+                "nl": "Tekst 5"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text6",
+            "placeholder": {
+                "en": "Text 6",
+                "nl": "Tekst 6"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text7",
+            "placeholder": {
+                "en": "Text 7",
+                "nl": "Tekst 7"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text8",
+            "placeholder": {
+                "en": "Text 8",
+                "nl": "Tekst 8"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text9",
+            "placeholder": {
+                "en": "Text 9",
+                "nl": "Tekst 9"
+            },
+            "required":false
+        },{
+            "type": "text",
+            "name": "text10",
+            "placeholder": {
+                "en": "Text 10",
+                "nl": "Tekst 10"
+            },
+            "required":false
+        },
+        {
+            "type": "number",
+            "name": "number1",
+            "placeholder": {
+                "en": "Number 1",
+                "nl": "Nummer 1"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number2",
+            "placeholder": {
+                "en": "Number 2",
+                "nl": "Nummer 2"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number3",
+            "placeholder": {
+                "en": "Number 3",
+                "nl": "Nummer 3"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number4",
+            "placeholder": {
+                "en": "Number 4",
+                "nl": "Nummer 4"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number5",
+            "placeholder": {
+                "en": "Number 5",
+                "nl": "Nummer 5"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number6",
+            "placeholder": {
+                "en": "Number 6",
+                "nl": "Nummer 6"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number7",
+            "placeholder": {
+                "en": "Number 7",
+                "nl": "Nummer 7"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number8",
+            "placeholder": {
+                "en": "Number 8",
+                "nl": "Nummer 8"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number9",
+            "placeholder": {
+                "en": "Number 9",
+                "nl": "Nummer 9"
+            },
+            "required":false
+        },{
+            "type": "number",
+            "name": "number10",
+            "placeholder": {
+                "en": "Number 10",
+                "nl": "Nummer 10"
+            },
+            "required":false
+        },
+        {
+            "type": "checkbox",
+            "name": "boolean1",
+            "placeholder": {
+                "en": "Yes/No 1",
+                "nl": "Ja/Nee 1"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean2",
+            "placeholder": {
+                "en": "Yes/No 2",
+                "nl": "Ja/Nee 2"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean3",
+            "placeholder": {
+                "en": "Yes/No 3",
+                "nl": "Ja/Nee 3"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean4",
+            "placeholder": {
+                "en": "Yes/No 4",
+                "nl": "Ja/Nee 4"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean5",
+            "placeholder": {
+                "en": "Yes/No 5",
+                "nl": "Ja/Nee 5"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean6",
+            "placeholder": {
+                "en": "Yes/No 6",
+                "nl": "Ja/Nee 6"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean7",
+            "placeholder": {
+                "en": "Yes/No 7",
+                "nl": "Ja/Nee 7"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean8",
+            "placeholder": {
+                "en": "Yes/No 8",
+                "nl": "Ja/Nee 8"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean9",
+            "placeholder": {
+                "en": "Yes/No 9",
+                "nl": "Ja/Nee 9"
+            },
+            "required":false
+        },{
+            "type": "checkbox",
+            "name": "boolean10",
+            "placeholder": {
+                "en": "Yes/No 10",
+                "nl": "Ja/Nee 10"
+            },
+            "required":false
+        }
+    ]
+}
