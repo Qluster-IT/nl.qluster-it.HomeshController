@@ -1,6 +1,6 @@
 {
   "id": "nl.qluster-it.HomeshController",
-  "version": "0.9.13",
+  "version": "1.0.0",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -21,9 +21,9 @@
     "large": "/assets/images/large.png",
     "xlarge": "/assets/images/xlarge.png"
   },  
-  "source": "https://bitbucket.org/QlusterIT/nl.qluster-it.homeshcontroller/",
+  "source": "https://github.com/Qluster-IT/nl.qluster-it.HomeshController/",
   "bugs": {
-    "url": "https://bitbucket.org/QlusterIT/nl.qluster-it.homeshcontroller/issues"
+    "url": "https://github.com/Qluster-IT/nl.qluster-it.HomeshController/issues"
   },
   "homeyCommunityTopicId": 70369,
   
