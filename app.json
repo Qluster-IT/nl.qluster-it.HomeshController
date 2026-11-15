@@ -23,6 +23,7 @@
     "xlarge": "/assets/images/xlarge.png"
   },
   "source": "https://github.com/Qluster-IT/nl.qluster-it.HomeshController/",
+  "homepage": "https://github.com/Qluster-IT/nl.qluster-it.HomeshController/wiki",
   "bugs": {
     "url": "https://github.com/Qluster-IT/nl.qluster-it.HomeshController/issues"
   },
